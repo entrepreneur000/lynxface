@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Analyze - LynxFace</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- ✅ TensorFlow.js + Face Landmarks (runtime=tfjs, serversiz, pulsuz) -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4/dist/tf.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@3/dist/face-landmarks-detection.min.js" crossorigin="anonymous"></script>
+
+  <!-- ❌ MediaPipe Tasks/WASM çıxarıldı: CORS/WASM problemi yaratmasın -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.js" crossorigin="anonymous"></script> -->
+  <!-- <link rel="preload" as="fetch" crossorigin="anonymous" href="https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task"> -->
+</head>
+<body>
+  <div class="top-progress-bar" id="top-progress"></div>
+
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <a href="index.html" class="flex items-center space-x-2 hover:opacity-80 transition">
+          <img src="favicon.png" alt="LynxFace Logo" width="32" height="32" class="rounded">
+          <span class="text-xl font-bold text-gray-900">LynxFace</span>
+        </a>
+        <div class="hidden md:flex space-x-8 items-center">
+          <a href="index.html" class="text-gray-700 hover:text-cyan-600 transition">Home</a>
+          <a href="analyze.html" class="text-cyan-600 font-semibold border-b-2 border-cyan-600 pb-1">Analyze</a>
+          <a href="privacy.html" class="text-gray-700 hover:text-cyan-600 transition">Privacy</a>
+          <a href="contact.html" class="text-gray-700 hover:text-cyan-600 transition">Contact</a>
+          <button id="theme-toggle" class="p-2 rounded-lg hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-cyan-500" aria-label="Toggle dark mode">
+            <svg id="theme-icon-light" class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            <svg id="theme-icon-dark" class="w-5 h-5 text-gray-700 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+        </div>
+        <button id="mobile-menu-btn" class="md:hidden text-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 rounded p-2">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+      <div id="mobile-menu" class="hidden md:hidden pb-4">
+        <a href="index.html" class="block py-2 text-gray-700 hover:text-cyan-600">Home</a>
+        <a href="analyze.html" class="block py-2 text-cyan-600 font-semibold">Analyze</a>
+        <a href="privacy.html" class="block py-2 text-gray-700 hover:text-cyan-600">Privacy</a>
+        <a href="contact.html" class="block py-2 text-gray-700 hover:text-cyan-600">Contact</a>
+        <button id="theme-toggle-mobile" class="flex items-center py-2 text-gray-700 hover:text-cyan-600 w-full">
+          <svg id="theme-icon-mobile" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span id="theme-text-mobile">Dark Mode</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="fade-enter">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-8">Face Analysis</h1>
+
+      <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div class="mb-6">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Upload Photo</label>
+              <p class="text-sm text-gray-500">JPG, PNG, or WEBP</p>
+            </div>
+            <span class="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">
+              <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              Local • No Upload
+            </span>
+          </div>
+
+          <div id="drop-zone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-4 transition hover:border-cyan-500 hover:bg-gray-50">
+            <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+              <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <p class="text-gray-600 mb-2">Drag and drop your photo here, or</p>
+            <input type="file" id="file-input" accept=".jpg,.jpeg,.png,.webp" class="hidden">
+            <button id="upload-btn" class="bg-gradient-to-r from-cyan-600 to-indigo-600 text-white font-semibold px-6 py-2 rounded-lg shadow-md hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2">Choose File</button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Or load from URL</label>
+              <div class="flex gap-2">
+                <input type="url" id="url-input" placeholder="https://example.com/image.jpg" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <button id="url-btn" class="bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-700 transition focus:outline-none focus:ring-2 focus:ring-cyan-500">Load</button>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Or use camera</label>
+              <button id="camera-btn" class="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-indigo-500 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0010.07 4h3.86a2 2 0 001.664.89l.812 1.22A2 2 0 0118.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                Take Photo
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="camera-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div class="bg-white rounded-lg p-6 max-w-2xl w-full">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-gray-900">Take Photo</h3>
+              <button id="close-camera" class="text-gray-500 hover:text-gray-700">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+              </button>
+            </div>
+            <video id="camera-video" class="w-full rounded-lg mb-4" autoplay playsinline></video>
+            <canvas id="camera-canvas" class="hidden"></canvas>
+            <div class="flex gap-4">
+              <button id="capture-btn" class="flex-1 bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-700 transition">Capture</button>
+              <button id="cancel-camera" class="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="loading-state" class="hidden flex flex-col items-center justify-center py-12">
+          <div class="spinner mb-4"></div>
+          <p class="text-gray-600 font-medium">Loading AI model...</p>
+        </div>
+
+        <div id="preview-section" class="hidden">
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-3">Select Gender</label>
+            <div class="flex gap-4">
+              <label class="flex items-center cursor-pointer">
+                <input type="radio" name="gender" value="male" class="w-4 h-4 text-cyan-600 focus:ring-cyan-500" checked>
+                <span class="ml-2 text-gray-700">Male</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <input type="radio" name="gender" value="female" class="w-4 h-4 text-cyan-600 focus:ring-cyan-500">
+                <span class="ml-2 text-gray-700">Female</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="flex justify-center mb-6">
+            <div id="preview-container" class="relative inline-block max-w-full">
+              <img id="preview-image" src="/placeholder.svg" alt="Preview" class="rounded-lg shadow-md max-w-full h-auto">
+              <canvas id="overlay-canvas" class="rounded-lg"></canvas>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-4">
+            <button id="analyze-btn" disabled class="flex-1 sm:flex-none bg-gradient-to-r from-cyan-600 to-indigo-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">Start Analyze</button>
+            <button id="reset-btn" class="flex-1 sm:flex-none bg-gray-200 text-gray-700 font-semibold px-6 py-3 rounded-lg hover:bg-gray-300 transition focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="error-message" class="hidden bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-8">
+        <p class="font-medium">Error</p>
+        <p id="error-text" class="text-sm"></p>
+      </div>
+
+      <div id="metrics-section" class="hidden">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Analysis Results</h2>
+        <div id="metrics-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"></div>
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-900">
+          <p class="font-medium mb-1">Disclaimer</p>
+          <p>All processing happens locally in your browser. This is not medical or aesthetic diagnosis. Results are for entertainment purposes only.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-gray-50 border-t border-gray-200 mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <p class="text-center text-gray-600 mb-4">
+        © 2025 LynxFace – AI Face Analyzer. All rights reserved.<br/>
+        Built by Ali Hasanli.
+      </p>
+      <div class="flex flex-wrap justify-center gap-6 text-sm">
+        <a href="index.html" class="text-cyan-600 hover:underline">Home</a>
+        <a href="analyze.html" class="text-cyan-600 hover:underline">Analyze</a>
+        <a href="privacy.html" class="text-cyan-600 hover:underline">Privacy</a>
+        <a href="contact.html" class="text-cyan-600 hover:underline">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

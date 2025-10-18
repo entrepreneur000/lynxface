@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - LynxFace</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="top-progress-bar" id="top-progress"></div>
+  
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Made logo clickable to go to home page -->
+        <a href="index.html" class="flex items-center space-x-2 hover:opacity-80 transition">
+          <img src="favicon.png" alt="LynxFace Logo" width="32" height="32" class="rounded">
+          <span class="text-xl font-bold text-gray-900">LynxFace</span>
+        </a>
+        
+        <div class="hidden md:flex space-x-8 items-center">
+          <a href="index.html" class="text-gray-700 hover:text-cyan-600 transition">Home</a>
+          <a href="analyze.html" class="text-gray-700 hover:text-cyan-600 transition">Analyze</a>
+          <a href="privacy.html" class="text-cyan-600 font-semibold border-b-2 border-cyan-600 pb-1">Privacy</a>
+          <a href="contact.html" class="text-gray-700 hover:text-cyan-600 transition">Contact</a>
+          <button id="theme-toggle" class="p-2 rounded-lg hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-cyan-500" aria-label="Toggle dark mode">
+            <svg id="theme-icon-light" class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            <svg id="theme-icon-dark" class="w-5 h-5 text-gray-700 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <button id="mobile-menu-btn" class="md:hidden text-gray-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 rounded p-2">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <div id="mobile-menu" class="hidden md:hidden pb-4">
+        <a href="index.html" class="block py-2 text-gray-700 hover:text-cyan-600">Home</a>
+        <a href="analyze.html" class="block py-2 text-gray-700 hover:text-cyan-600">Analyze</a>
+        <a href="privacy.html" class="block py-2 text-cyan-600 font-semibold">Privacy</a>
+        <a href="contact.html" class="block py-2 text-gray-700 hover:text-cyan-600">Contact</a>
+        <button id="theme-toggle-mobile" class="flex items-center py-2 text-gray-700 hover:text-cyan-600 w-full">
+          <svg id="theme-icon-mobile" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <span id="theme-text-mobile">Dark Mode</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="fade-enter">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-8">Privacy Policy</h1>
+      
+      <div class="prose prose-lg max-w-none">
+        <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
+          <div class="flex items-start">
+            <svg class="w-6 h-6 text-green-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+            <div>
+              <h3 class="text-lg font-semibold text-green-900 mb-2">Your Privacy is Protected</h3>
+              <p class="text-green-800 text-sm">All face analysis happens locally in your browser. Your photos never leave your device and are never uploaded to any server.</p>
+            </div>
+          </div>
+        </div>
+
+        <section class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">1. Information We Collect</h2>
+          <p class="text-gray-700 mb-4">LynxFace is designed with privacy as a core principle. We collect minimal information:</p>
+          <ul class="list-disc pl-6 text-gray-700 space-y-2">
+            <li><strong>No Photo Storage:</strong> Photos you upload for analysis are processed entirely in your browser using client-side JavaScript and are never transmitted to our servers.</li>
+            <li><strong>Contact Form Data:</strong> When you submit the contact form, we collect your name, email address, and message through Formspree, a third-party service.</li>
+            <li><strong>Analytics:</strong> We may use basic analytics to understand how visitors use our site (page views, browser type, etc.) but do not track individual users.</li>
+          </ul>
+        </section>
+
+        <section class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">2. How We Use Your Information</h2>
+          <p class="text-gray-700 mb-4">The limited information we collect is used solely for:</p>
+          <ul class="list-disc pl-6 text-gray-700 space-y-2">
+            <li><strong>Face Analysis:</strong> All facial analysis is performed locally on your device using MediaPipe technology. No data is sent to external servers.</li>
+            <li><strong>Communication:</strong> Contact form submissions are used only to respond to your inquiries.</li>
+            <li><strong>Service Improvement:</strong> Anonymous usage statistics help us improve the website experience.</li>
+          </ul>
+        </section>
+
+        <section class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">3. Data Storage and Security</h2>
+          <ul class="list-disc pl-6 text-gray-700 space-y-2">
+            <li><strong>Local Processing:</strong> All face analysis happens in your browser. Photos are temporarily loaded into memory and discarded when you close the page or reset the analysis.</li>
+            <li><strong>No Server Storage:</strong> We do not store, save, or have access to any photos you analyze.</li>
+            <li><strong>Third-Party Services:</strong> Contact form data is handled by Formspree, which has its own privacy policy. We recommend reviewing their terms.</li>
+          </ul>
+        </section>
+
+        <section class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">4. Third-Party Services</h2>
+          <p class="text-gray-700 mb-4">LynxFace uses the following third-party services:</p>
+          <ul class="list-disc pl-6 text-gray-700 space-y-2">
+            <li><strong>MediaPipe (Google):</strong> Face landmark detection runs entirely in your browser. No data is sent to Google servers.</li>
+            <li><strong>Formspree:</strong> Contact form submissions are processed through Formspree. See their privacy policy at <a href="https://formspree.io/legal/privacy-policy/" class="text-cyan-600 hover:underline" target="_blank" rel="noopener">formspree.io/legal/privacy-policy</a>.</li>
+            <li><strong>Tailwind CSS CDN:</strong> We load styling from a CDN for faster page loads.</li>
+          </ul>
+        </section>
+
+        <section class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">5. Cookies and Tracking</h2>
+          <p class="text-gray-700 mb-4">LynxFace does not use cookies for tracking purposes. Any cookies used are strictly functional (e.g., session management) and do not track your personal information.</p>
+        </section>
+
+        <section class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">6. Your Rights</h2>
+          <p class="text-gray-700 mb-4">You have the right to:</p>
+          <ul class="list-disc pl-6 text-gray-700 space-y-2">
+            <li>Use LynxFace without providing any personal information (except when contacting us)</li>
+            <li>Request deletion of any contact form data we may have stored</li>
+            <li>Ask questions about our privacy practices</li>
+          </ul>
+        </section>
+
+        <section class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">7. Children's Privacy</h2>
+          <p class="text-gray-700 mb-4">LynxFace is not intended for children under 13 years of age. We do not knowingly collect personal information from children.</p>
+        </section>
+
+        <section class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">8. Changes to This Policy</h2>
+          <p class="text-gray-700 mb-4">We may update this privacy policy from time to time. Any changes will be posted on this page with an updated revision date.</p>
+        </section>
+
+        <section class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">9. Contact Us</h2>
+          <p class="text-gray-700 mb-4">If you have any questions about this privacy policy or our practices, please contact us through our <a href="contact.html" class="text-cyan-600 hover:underline">contact form</a>.</p>
+        </section>
+
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 mt-8">
+          <p class="text-sm text-gray-600">
+            <strong>Last Updated:</strong> January 2025<br>
+            <strong>Effective Date:</strong> January 2025
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-gray-50 border-t border-gray-200 mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <p class="text-center text-gray-600 mb-4">
+        © 2025 LynxFace – AI Face Analyzer. All rights reserved.<br>
+        Built by Ali Hasanli.
+      </p>
+      <div class="flex flex-wrap justify-center gap-6 text-sm">
+        <a href="index.html" class="text-cyan-600 hover:underline">Home</a>
+        <a href="analyze.html" class="text-cyan-600 hover:underline">Analyze</a>
+        <a href="privacy.html" class="text-cyan-600 hover:underline">Privacy</a>
+        <a href="contact.html" class="text-cyan-600 hover:underline">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
